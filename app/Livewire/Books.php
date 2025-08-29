@@ -11,11 +11,11 @@ class Books extends Component
 
     public $bookId;
 
-    public $oldName;
-
     public $deleteName;
 
     public $nameBook;
+
+    public $isUpdateMode = false;
 
     public function render()
     {
@@ -25,10 +25,34 @@ class Books extends Component
         ]);
     }
 
+    protected function resetComponent()
+    {
+        $this->resetErrorBag();
+        $this->name = $this->content = $this->author = $this->bookId = $this->nameBook = '';
+        $this->isUpdateMode = false;
+    }
+
+    protected function rules()
+    {
+        return [
+            "name" => 'required|unique:books,name,' . ($this->bookId ? $this->bookId : '') ,
+            "content" => 'required',
+            "author" => 'required'
+        ];
+    }
+
+    protected function messages() {
+        return [
+            'name.required' => 'Tên sách là bắt buộc',
+            'name.unique' => 'Tên sách đã tồn tại',
+            'content.required' => 'Nội dung là bắt buộc',
+
+        ];
+    }
+
     public function addBook()
     {
-        $this->name = $this->content = $this->author = '';
-        $this->resetErrorBag();
+        $this->resetComponent();
         $this->dispatch('showBookModal');
     }
 
@@ -36,20 +60,14 @@ class Books extends Component
     {
         //dd($this->all());
 
-        $this->validate([
-            "name" => 'required|unique:books,name',
-            "content" => 'required',
-            "author" => 'required',
-        ], [
-            'name.required' => 'Tên sách là bắt buộc'
-        ]);
+        $this->validate();
 
         Book::create([
             "name" => $this->name,
             "content" => $this->content,
             "author" => $this->author,
         ]);
-
+        $this->resetComponent();
         $this->dispatch('hideBookModal');
     }
 
@@ -74,9 +92,36 @@ class Books extends Component
 
         if ($oldName === $deleteName) {
             $book->delete();
+            $this->resetComponent();
             $this->dispatch('hideDeleteModal');
         } else {
-            $this->addError('deleteName','do not match');
+            $this->addError('deleteName', 'do not match');
         }
+    }
+
+    public function editBook($id)
+    {
+        $this->resetErrorBag();
+        $book = Book::find($id);
+        $this->bookId = $book->id;
+        $this->name = $book->name;
+        $this->author = $book->author;
+        $this->content = $book->content;
+        $this->isUpdateMode = true;
+        $this->dispatch('showBookModal');
+    }
+
+    public function updateBook()
+    {
+        $this->validate();
+        $book = Book::find($this->bookId);
+        $book->update([
+            'name' => $this->name,
+            'author' => $this->author,
+            'content' => $this->content,
+        ]);
+
+        $this->resetComponent();
+        $this->dispatch('hideBookModal');
     }
 }

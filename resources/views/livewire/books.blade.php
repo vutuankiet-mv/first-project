@@ -42,8 +42,11 @@
                                 <td>{{ $book->author }}</td>
                                 <td>{{ $book->content }}</td>
                                 <td>
+                                    <button wire:click='editBook({{ $book->id }})' type="button"
+                                        class="btn btn-dark">Edit</button>
                                     <button wire:click='deleteBook({{ $book->id }})' type="button"
                                         class="btn btn-danger">Delete</button>
+
                                 </td>
                             </tr>
                         @empty
@@ -56,8 +59,8 @@
             </div>
         </div>
         {{-- Delete Book --}}
-        <div wire:ignore.self class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-            style="display: none;" aria-hidden="true">
+        <div wire:ignore.self class="modal fade" id="delete-modal" tabindex="-1" role="dialog"
+            aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -97,10 +100,10 @@
     <div wire:ignore.self class="modal fade" id="Book-modal" tabindex="-1" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-dialog-centered">
-            <form wire:submit='createBook()' class="modal-content">
+            <form wire:submit='{{ $isUpdateMode ? 'updateBook()' : 'createBook()' }}' class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="myLargeModalLabel">
-                        Add book
+                        {{ $isUpdateMode ? 'Edit book' : 'Add book' }}
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         ×
@@ -140,7 +143,7 @@
                         Close
                     </button>
                     <button type="submit" class="btn btn-primary">
-                        Save changes
+                        {{ $isUpdateMode ? 'Edit book' : 'Add book' }}
                     </button>
                 </div>
             </form>
