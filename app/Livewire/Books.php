@@ -25,7 +25,7 @@ class Books extends Component
         ]);
     }
 
-    protected function resetComponent()
+    protected function resetData()
     {
         $this->resetErrorBag();
         $this->name = $this->content = $this->author = $this->bookId = $this->nameBook = '';
@@ -37,7 +37,7 @@ class Books extends Component
         return [
             "name" => 'required|unique:books,name,' . ($this->bookId ? $this->bookId : '') ,
             "content" => 'required',
-            "author" => 'required'
+            "author" => 'required',
         ];
     }
 
@@ -46,13 +46,13 @@ class Books extends Component
             'name.required' => 'Tên sách là bắt buộc',
             'name.unique' => 'Tên sách đã tồn tại',
             'content.required' => 'Nội dung là bắt buộc',
-
+            'author.required' => 'Tác giả là bắt buộc',
         ];
     }
 
     public function addBook()
     {
-        $this->resetComponent();
+        $this->resetData();
         $this->dispatch('showBookModal');
     }
 
@@ -67,7 +67,7 @@ class Books extends Component
             "content" => $this->content,
             "author" => $this->author,
         ]);
-        $this->resetComponent();
+        $this->resetData();
         $this->dispatch('hideBookModal');
     }
 
@@ -92,7 +92,7 @@ class Books extends Component
 
         if ($oldName === $deleteName) {
             $book->delete();
-            $this->resetComponent();
+            $this->resetData();
             $this->dispatch('hideDeleteModal');
         } else {
             $this->addError('deleteName', 'do not match');
@@ -121,7 +121,7 @@ class Books extends Component
             'content' => $this->content,
         ]);
 
-        $this->resetComponent();
+        $this->resetData();
         $this->dispatch('hideBookModal');
     }
 }
