@@ -12,7 +12,10 @@ class Locations extends Component
     public $locationId;
 
     public $nameLocation;
+
     public $nameLocationDelete;
+
+    public $isLocationMode;
 
     public function render()
     {
@@ -73,5 +76,10 @@ class Locations extends Component
         } else {
             $this->addError('nameLocation','Name location does not match');
         }
+    }
+
+    public function editLocation($id)
+    {
+        $isLocationMode = true;
     }
 }

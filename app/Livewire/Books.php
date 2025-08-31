@@ -28,7 +28,7 @@ class Books extends Component
     protected function resetData()
     {
         $this->resetErrorBag();
-        $this->name = $this->content = $this->author = $this->bookId = $this->nameBook = '';
+        $this->name = $this->content = $this->author = $this->bookId = $this->nameBook = $this->deleteName = '';
         $this->isUpdateMode = false;
     }
 
@@ -88,7 +88,7 @@ class Books extends Component
         ]);
         $book = Book::find($this->bookId);
         $oldName = $book->name;
-        $deleteName = $this->name;
+        $deleteName = $this->deleteName;
 
         if ($oldName === $deleteName) {
             $book->delete();

@@ -43,8 +43,12 @@
                             <td>{{ $location->name }}</td>
                             <td>{{ $location->address }}</td>
                             <td>{{ $location->phone }}</td>
-                            <td><button wire:click='deleteLocation({{ $location->id }})' type="button"
-                                    class="btn btn-dark">Delete</button>
+                            <td>
+                                <button wire:click='editLocation({{ $location->id }})' type="button"
+                                    class="btn btn-dark">Edit</button>
+
+                                <button wire:click='deleteLocation({{ $location->id }})' type="button"
+                                    class="btn btn-danger">Delete</button>
                             </td>
                         </tr>
                     @empty
@@ -58,8 +62,8 @@
     </div>
 
     {{-- Delete --}}
-    <div wire:ignore.self class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true" style="display: none;">
+    <div wire:ignore.self class="modal fade" id="delete-modal" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <form wire:submit='deleteConfirm()' class="modal-content">
                 <div class="modal-header">
@@ -80,7 +84,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         Close
                     </button>
                     <button type="submit" class="btn btn-primary">
